@@ -32,6 +32,17 @@ jobs:
           publish_branch: gh-pages
           destination_dir: pr/${{ github.event.pull_request.number }}
 
+      - name: Create Redirect for PR
+        run: |
+          echo "<meta http-equiv='refresh' content='0; url=pr/${{ github.event.pull_request.number }}/index.html'>" > ./storybook-static/index.html
+
+      - name: Deploy Redirect to Root
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook-static
+          publish_branch: gh-pages
+
       - name: Comment on PR with Storybook Link
         if: success()
         env:
